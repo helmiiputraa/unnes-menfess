@@ -8,64 +8,61 @@ use Illuminate\Support\Facades\DB;
 class AliasPoolSeeder extends Seeder
 {
     /**
-     * Seed alias pool dengan 150 kata sifat × 150 kata benda = 22.500 kombinasi.
+     * Seed alias pool dengan 100 kata sifat × 100 kata benda = 10.000 kombinasi.
+     *
+     * Sistem alias:
+     * - Setiap room chat menfess, user mendapat alias unik yang berbeda
+     * - Dalam 1 room chat, alias user tetap sama (konsisten)
+     * - Pindah room chat lain = dapat alias baru
      */
     public function run(): void
     {
         $adjectives = [
-            // Warna (30)
+            // Warna (20)
             'Merah', 'Biru', 'Hijau', 'Kuning', 'Ungu', 'Jingga', 'Pink', 'Putih', 'Hitam', 'Abu',
-            'Emas', 'Perak', 'Coklat', 'Krem', 'Magenta', 'Cyan', 'Indigo', 'Violet', 'Maroon', 'Teal',
-            'Salmon', 'Mint', 'Lavender', 'Coral', 'Ivory', 'Crimson', 'Scarlet', 'Azure', 'Jade', 'Ruby',
+            'Emas', 'Perak', 'Coklat', 'Magenta', 'Indigo', 'Violet', 'Teal', 'Coral', 'Jade', 'Crimson',
 
-            // Sifat positif (30)
+            // Sifat positif (20)
             'Ceria', 'Berani', 'Bijak', 'Kreatif', 'Gesit', 'Lincah', 'Ramah', 'Cerdik', 'Tangguh', 'Setia',
-            'Santai', 'Keren', 'Ajaib', 'Epik', 'Hebat', 'Gigih', 'Sabar', 'Jujur', 'Tekun', 'Ulet',
-            'Sopan', 'Dermawan', 'Anggun', 'Elegan', 'Gagah', 'Kalem', 'Jenaka', 'Trendy', 'Sporty', 'Aktif',
+            'Keren', 'Ajaib', 'Epik', 'Hebat', 'Gigih', 'Sabar', 'Jujur', 'Tekun', 'Anggun', 'Gagah',
 
-            // Sifat lucu/unik (30)
-            'Galak', 'Malu', 'Pemalu', 'Usil', 'Jahil', 'Nyeleneh', 'Absurd', 'Receh', 'Gabut', 'Baper',
-            'Bucin', 'Mager', 'Rebahan', 'Kepo', 'Gercep', 'Salty', 'Savage', 'Ambigu', 'Random', 'Zonk',
-            'Panik', 'Santuy', 'Asik', 'Seru', 'Gokil', 'Gas', 'Mantap', 'Sultan', 'Cupu', 'Pro',
+            // Sifat lucu/unik (20)
+            'Galak', 'Pemalu', 'Usil', 'Jahil', 'Nyeleneh', 'Receh', 'Gabut', 'Baper', 'Mager', 'Kepo',
+            'Salty', 'Savage', 'Random', 'Santuy', 'Asik', 'Gokil', 'Mantap', 'Sultan', 'Cupu', 'Pro',
 
-            // Sifat alam (30)
-            'Dingin', 'Hangat', 'Panas', 'Sejuk', 'Lembut', 'Keras', 'Terang', 'Gelap', 'Segar', 'Basah',
-            'Kering', 'Beku', 'Liar', 'Jinak', 'Langka', 'Antik', 'Klasik', 'Modern', 'Retro', 'Vintage',
-            'Mistis', 'Kosmik', 'Lunar', 'Solar', 'Tropis', 'Arktik', 'Gurun', 'Samudra', 'Vulkanik', 'Meteor',
+            // Sifat alam (20)
+            'Dingin', 'Hangat', 'Panas', 'Sejuk', 'Lembut', 'Terang', 'Gelap', 'Segar', 'Liar', 'Langka',
+            'Klasik', 'Modern', 'Retro', 'Mistis', 'Kosmik', 'Tropis', 'Arktik', 'Vulkanik', 'Lunar', 'Solar',
 
-            // Sifat ukuran/bentuk (30)
+            // Sifat ukuran/bentuk (20)
             'Kecil', 'Besar', 'Mini', 'Mega', 'Super', 'Ultra', 'Mungil', 'Raksasa', 'Tinggi', 'Pendek',
-            'Lebar', 'Sempit', 'Tebal', 'Tipis', 'Bulat', 'Kotak', 'Lancip', 'Tumpul', 'Runcing', 'Melengkung',
-            'Rapih', 'Berantakan', 'Simetris', 'Abstrak', 'Unik', 'Standar', 'Premium', 'Ekstra', 'Spesial', 'Original',
+            'Bulat', 'Lancip', 'Unik', 'Premium', 'Ekstra', 'Spesial', 'Rapih', 'Abstrak', 'Simetris', 'Original',
         ];
 
         $nouns = [
-            // Hewan darat (30)
+            // Hewan darat (20)
             'Kucing', 'Anjing', 'Gajah', 'Singa', 'Harimau', 'Beruang', 'Kelinci', 'Rubah', 'Serigala', 'Rusa',
-            'Kuda', 'Zebra', 'Jerapah', 'Monyet', 'Gorila', 'Panda', 'Koala', 'Kanguru', 'Hamster', 'Tupai',
-            'Landak', 'Musang', 'Rakun', 'Kijang', 'Badak', 'Kerbau', 'Kambing', 'Domba', 'Llama', 'Alpaka',
+            'Kuda', 'Panda', 'Koala', 'Kanguru', 'Hamster', 'Tupai', 'Landak', 'Musang', 'Badak', 'Domba',
 
-            // Hewan terbang (20)
-            'Elang', 'Rajawali', 'Merak', 'Burung', 'Kolibri', 'Pelikan', 'Gagak', 'Merpati', 'Kakatua', 'Beo',
-            'Flamingo', 'Bangau', 'Hantu', 'Camar', 'Walet', 'Kenari', 'Cendrawasih', 'Nuri', 'Jalak', 'Kutilang',
+            // Hewan terbang (15)
+            'Elang', 'Rajawali', 'Merak', 'Kolibri', 'Gagak', 'Merpati', 'Kakatua', 'Beo',
+            'Flamingo', 'Bangau', 'Camar', 'Kenari', 'Cendrawasih', 'Nuri', 'Kutilang',
 
-            // Hewan air (20)
-            'Ikan', 'Hiu', 'Lumba', 'Paus', 'Gurita', 'Ubur', 'Kepiting', 'Udang', 'Penyu', 'Kuda Laut',
-            'Pari', 'Belut', 'Lele', 'Salmon', 'Tuna', 'Nemo', 'Dory', 'Koi', 'Arwana', 'Piranha',
+            // Hewan air (10)
+            'Hiu', 'Lumba', 'Paus', 'Gurita', 'Kepiting', 'Penyu', 'Pari', 'Koi', 'Arwana', 'Piranha',
 
-            // Makanan Indonesia (30)
-            'Nasi', 'Bakso', 'Sate', 'Rendang', 'Gado', 'Tempe', 'Tahu', 'Ketoprak', 'Siomay', 'Batagor',
-            'Cilok', 'Cireng', 'Gorengan', 'Martabak', 'Roti', 'Donat', 'Kue', 'Mie', 'Soto', 'Rawon',
-            'Gudeg', 'Pecel', 'Rujak', 'Lumpia', 'Pempek', 'Kerak', 'Serabi', 'Klepon', 'Onde', 'Cendol',
+            // Makanan Indonesia (25)
+            'Bakso', 'Sate', 'Rendang', 'Tempe', 'Tahu', 'Siomay', 'Batagor', 'Cilok', 'Cireng', 'Martabak',
+            'Donat', 'Mie', 'Soto', 'Rawon', 'Gudeg', 'Pecel', 'Rujak', 'Lumpia', 'Pempek', 'Klepon',
+            'Onde', 'Cendol', 'Serabi', 'Gorengan', 'Ketoprak',
 
-            // Benda langit/alam (20)
-            'Bintang', 'Bulan', 'Matahari', 'Komet', 'Planet', 'Galaksi', 'Nebula', 'Asteroid', 'Aurora', 'Pelangi',
-            'Awan', 'Petir', 'Hujan', 'Salju', 'Embun', 'Angin', 'Badai', 'Topan', 'Tornado', 'Tsunami',
+            // Benda langit/alam (15)
+            'Bintang', 'Bulan', 'Matahari', 'Komet', 'Planet', 'Nebula', 'Aurora', 'Pelangi',
+            'Awan', 'Petir', 'Hujan', 'Embun', 'Angin', 'Badai', 'Salju',
 
-            // Benda sehari-hari (30)
-            'Pensil', 'Buku', 'Tas', 'Sepatu', 'Topi', 'Kacamata', 'Jam', 'Kunci', 'Payung', 'Lampu',
-            'Sendok', 'Garpu', 'Piring', 'Gelas', 'Botol', 'Kursi', 'Meja', 'Pintu', 'Jendela', 'Cermin',
-            'Telepon', 'Radio', 'Piano', 'Gitar', 'Drum', 'Kompas', 'Peta', 'Globe', 'Dadu', 'Kartu',
+            // Benda sehari-hari (15)
+            'Pensil', 'Buku', 'Kacamata', 'Payung', 'Lampu', 'Gelas', 'Kursi', 'Cermin',
+            'Piano', 'Gitar', 'Kompas', 'Peta', 'Globe', 'Dadu', 'Kartu',
         ];
 
         $batchSize = 500;
