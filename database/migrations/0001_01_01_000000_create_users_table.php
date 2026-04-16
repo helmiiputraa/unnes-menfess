@@ -14,9 +14,21 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('username')->unique()->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable(); // Nullable for Google OAuth
+            $table->string('avatar')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('whatsapp_number')->nullable();
+            $table->timestamp('whatsapp_verified_at')->nullable();
+            $table->string('google_id')->unique()->nullable();
+            $table->text('bio')->nullable();
+            $table->boolean('is_verified_seller')->default(false);
+            $table->boolean('is_shadow_banned')->default(false);
+            $table->jsonb('privacy_settings')->nullable(); // {show_email, show_phone, etc}
+            $table->integer('points')->default(0);
+            $table->enum('role', ['user', 'admin', 'moderator'])->default('user');
             $table->rememberToken();
             $table->timestamps();
         });

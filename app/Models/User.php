@@ -20,8 +20,20 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'avatar',
+        'phone',
+        'whatsapp_number',
+        'whatsapp_verified_at',
+        'google_id',
+        'bio',
+        'is_verified_seller',
+        'is_shadow_banned',
+        'privacy_settings',
+        'points',
+        'role',
     ];
 
     /**
@@ -43,7 +55,27 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'whatsapp_verified_at' => 'datetime',
             'password' => 'hashed',
+            'privacy_settings' => 'array',
+            'is_verified_seller' => 'boolean',
+            'is_shadow_banned' => 'boolean',
         ];
+    }
+
+    /**
+     * Check if user is admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if user is moderator.
+     */
+    public function isModerator(): bool
+    {
+        return in_array($this->role, ['admin', 'moderator']);
     }
 }
